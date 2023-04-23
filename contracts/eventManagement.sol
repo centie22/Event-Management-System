@@ -9,7 +9,7 @@ contract eventManagement{
     Counters.Counter private eventId;
     Counters.Counter private registrationId;
     
-    address EventNFTAddr =0xebf93A28aA931fBE896E10A2da5634ED13B3fC51;
+    ERC721 EventNFTAddr;
 
     struct Event{
         string title;
@@ -29,10 +29,15 @@ contract eventManagement{
     mapping (uint => Event) public eventTrack;
 
 
+    constructor (ERC721 _nftAddr){
+    EventNFTAddr = _nftAddr;
+    }
+    
     function haveNFT() internal {
         require(ERC721(EventNFTAddr).balanceOf(msg.sender) > 0, "You need to have the event NFT to register for this event.");
     }
 
+    
     function regPayment(uint _EventId) internal {
         Event storage e = eventTrack[_EventId];
         uint regAmount = e.registrationAmount;
